@@ -1,0 +1,205 @@
+//UC1- create database addressbook_service 
+
+ MySQL  localhost:33060+ ssl  SQL > CREATE DATABASE addressbook_service;
+Query OK, 1 row affected (0.0114 sec)
+ MySQL  localhost:33060+ ssl  SQL > USE addressbook_service;
+Default schema set to `addressbook_service`.
+Fetching table and column names from `addressbook_service` for auto-completion... Press ^C to stop.
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > SELECT DATABASE();
++---------------------+
+| DATABASE()          |
++---------------------+
+| addressbook_service |
++---------------------+
+1 row in set (0.0004 sec)
+
+
+//UC2- create address_book table
+
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > CREATE TABLE addressbook( first_name VARCHAR(100) NOT NULL,last_name VARCHAR(100) NOT NULL,address VARCHAR(255) NOT NULL,city VARCHAR(100) NOT NULL,state VARCHAR(100) NOT NULL,zip VARCHAR(50) NOT NULL,phone VARCHAR(100) NOT NULL,email VARCHAR(100) NOT NULL,PRIMARY KEY (first_name));
+Query OK, 0 rows affected (0.0452 sec)
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > describe addressbook;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| first_name | varchar(100) | NO   | PRI | NULL    |       |
+| last_name  | varchar(100) | NO   |     | NULL    |       |
+| address    | varchar(255) | NO   |     | NULL    |       |
+| city       | varchar(100) | NO   |     | NULL    |       |
+| state      | varchar(100) | NO   |     | NULL    |       |
+| zip        | varchar(50)  | NO   |     | NULL    |       |
+| phone      | varchar(100) | NO   |     | NULL    |       |
+| email      | varchar(100) | NO   |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+8 rows in set (0.0013 sec)
+
+
+//UC3- insert contacts into address book
+
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > INSERT INTO addressbook VALUES ('Kashif','Ansari','chowk','lucknow','UP','226003','9598252500','krovel096@gmail.com'),('Abdul','Qadir','chowk','lko','UP','226003','7905763733','abdul@gmail.com'),('Abc','Xyz','add','city','state','123456','9876543210','xyz@gmail.com');
+Query OK, 3 rows affected (0.0052 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > select * from addressbook;
++------------+-----------+---------+---------+-------+--------+------------+---------------------+
+| first_name | last_name | address | city    | state | zip    | phone      | email               |
++------------+-----------+---------+---------+-------+--------+------------+---------------------+
+| Abc        | Xyz       | add     | city    | state | 123456 | 9876543210 | xyz@gmail.com       |
+| Abdul      | Qadir     | chowk   | lko     | UP    | 226003 | 7905763733 | abdul@gmail.com     |
+| Kashif     | Ansari    | chowk   | lucknow | UP    | 226003 | 9598252500 | krovel096@gmail.com |
++------------+-----------+---------+---------+-------+--------+------------+---------------------+
+3 rows in set (0.0030 sec)
+
+
+//UC4- edit existing contacts using their name
+
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > UPDATE addressbook SET email = 'abcxyz@gmail.com' WHERE first_name = 'Abc' AND last_name = 'Xyz';
+Query OK, 1 row affected (0.0067 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > select * from addressbook;
++------------+-----------+---------+---------+-------+--------+------------+---------------------+
+| first_name | last_name | address | city    | state | zip    | phone      | email               |
++------------+-----------+---------+---------+-------+--------+------------+---------------------+
+| Abc        | Xyz       | add     | city    | state | 123456 | 9876543210 | abcxyz@gmail.com    |
+| Abdul      | Qadir     | chowk   | lko     | UP    | 226003 | 7905763733 | abdul@gmail.com     |
+| Kashif     | Ansari    | chowk   | lucknow | UP    | 226003 | 9598252500 | krovel096@gmail.com |
++------------+-----------+---------+---------+-------+--------+------------+---------------------+
+3 rows in set (0.0027 sec)
+
+
+//UC5- delete contact from addressbook
+
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > DELETE FROM addressbook WHERE first_name = 'Abc' AND last_name = 'Xyz';
+Query OK, 1 row affected (0.0068 sec)
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > select * from addressbook;
++------------+-----------+---------+---------+-------+--------+------------+---------------------+
+| first_name | last_name | address | city    | state | zip    | phone      | email               |
++------------+-----------+---------+---------+-------+--------+------------+---------------------+
+| Abdul      | Qadir     | chowk   | lko     | UP    | 226003 | 7905763733 | abdul@gmail.com     |
+| Kashif     | Ansari    | chowk   | lucknow | UP    | 226003 | 9598252500 | krovel096@gmail.com |
++------------+-----------+---------+---------+-------+--------+------------+---------------------+
+2 rows in set (0.0004 sec)
+
+//UC6- retrieve data from table of a person belonging to a particular city or state
+
+**added some contacts**
+
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > INSERT INTO addressbook VALUES ('Asif','Ansari','meer anis lane','Kanpur','UP','668552','9856412378','asif@gmail.com'),('Ahmed','Kidwai','1134','Ahmedabad','Gujarat','112233','7876564512','ahmed@gmail.com'),('Abc','Xyz','add','city','state','123456','9876543210','xyz@gmail.com');
+Query OK, 3 rows affected (0.0064 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > select * from addressbook;
++------------+-----------+----------------+-----------+---------+--------+------------+---------------------+
+| first_name | last_name | address        | city      | state   | zip    | phone      | email               |
++------------+-----------+----------------+-----------+---------+--------+------------+---------------------+
+| Abc        | Xyz       | add            | city      | state   | 123456 | 9876543210 | xyz@gmail.com       |
+| Abdul      | Qadir     | chowk          | lko       | UP      | 226003 | 7905763733 | abdul@gmail.com     |
+| Ahmed      | Kidwai    | 1134           | Ahmedabad | Gujarat | 112233 | 7876564512 | ahmed@gmail.com     |
+| Asif       | Ansari    | meer anis lane | Kanpur    | UP      | 668552 | 9856412378 | asif@gmail.com      |
+| Kashif     | Ansari    | chowk          | lucknow   | UP      | 226003 | 9598252500 | krovel096@gmail.com |
++------------+-----------+----------------+-----------+---------+--------+------------+---------------------+
+5 rows in set (0.0029 sec)
+
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > SELECT * FROM addressbook WHERE city = 'Kanpur' OR state = 'UP';
++------------+-----------+----------------+---------+-------+--------+------------+---------------------+
+| first_name | last_name | address        | city    | state | zip    | phone      | email               |
++------------+-----------+----------------+---------+-------+--------+------------+---------------------+
+| Abdul      | Qadir     | chowk          | lko     | UP    | 226003 | 7905763733 | abdul@gmail.com     |
+| Asif       | Ansari    | meer anis lane | Kanpur  | UP    | 668552 | 9856412378 | asif@gmail.com      |
+| Kashif     | Ansari    | chowk          | lucknow | UP    | 226003 | 9598252500 | krovel096@gmail.com |
++------------+-----------+----------------+---------+-------+--------+------------+---------------------+
+3 rows in set (0.0008 sec)
+
+//UC7- ability to understand the size of address book by city or state
+
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > SELECT COUNT(State),state FROM addressbook GROUP BY state;
++--------------+---------+
+| COUNT(State) | state   |
++--------------+---------+
+|            1 | state   |
+|            3 | UP      |
+|            1 | Gujarat |
++--------------+---------+
+3 rows in set (0.0006 sec)
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > SELECT COUNT(city),city FROM addressbook GROUP BY city;
++-------------+-----------+
+| COUNT(city) | city      |
++-------------+-----------+
+|           1 | city      |
+|           1 | lko       |
+|           1 | Ahmedabad |
+|           1 | Kanpur    |
+|           1 | lucknow   |
++-------------+-----------+
+5 rows in set (0.0006 sec)
+
+//UC8- retrieve data sorted alphabetically from address_book according to city
+
+** added an extra contact **
+
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > INSERT INTO addressbook VALUES ('Aqib','Anees','calcutta cloth house','lucknow','UP','226641','7786042218','aqib@gmail.com');
+Query OK, 1 row affected (0.0055 sec)
+
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > SELECT * FROM addressbook WHERE city = 'lucknow' ORDER BY first_name;
++------------+-----------+----------------------+---------+-------+--------+------------+---------------------+
+| first_name | last_name | address              | city    | state | zip    | phone      | email               |
++------------+-----------+----------------------+---------+-------+--------+------------+---------------------+
+| Aqib       | Anees     | calcutta cloth house | lucknow | UP    | 226641 | 7786042218 | aqib@gmail.com      |
+| Kashif     | Ansari    | chowk                | lucknow | UP    | 226003 | 9598252500 | krovel096@gmail.com |
++------------+-----------+----------------------+---------+-------+--------+------------+---------------------+
+2 rows in set (0.0029 sec)
+
+//UC9- add fields-'name' and 'type' to the address book
+
+ALTER TABLE addressbook ADD name VARCHAR(50);
+Query OK, 0 rows affected (0.0519 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > ALTER TABLE addressbook ADD type VARCHAR(50) DEFAULT 'Friends';
+Query OK, 0 rows affected (0.0261 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > select * from addressbook;
++------------+-----------+----------------------+-----------+---------+--------+------------+---------------------+------+---------+
+| first_name | last_name | address              | city      | state   | zip    | phone      | email               | name | type    |
++------------+-----------+----------------------+-----------+---------+--------+------------+---------------------+------+---------+
+| Abc        | Xyz       | add                  | city      | state   | 123456 | 9876543210 | xyz@gmail.com       | NULL | Friends |
+| Abdul      | Qadir     | chowk                | lko       | UP      | 226003 | 7905763733 | abdul@gmail.com     | NULL | Friends |
+| Ahmed      | Kidwai    | 1134                 | Ahmedabad | Gujarat | 112233 | 7876564512 | ahmed@gmail.com     | NULL | Friends |
+| Aqib       | Anees     | calcutta cloth house | lucknow   | UP      | 226641 | 7786042218 | aqib@gmail.com      | NULL | Friends |
+| Asif       | Ansari    | meer anis lane       | Kanpur    | UP      | 668552 | 9856412378 | asif@gmail.com      | NULL | Friends |
+| Kashif     | Ansari    | chowk                | lucknow   | UP      | 226003 | 9598252500 | krovel096@gmail.com | NULL | Friends |
++------------+-----------+----------------------+-----------+---------+--------+------------+---------------------+------+---------+
+6 rows in set (0.0010 sec)
+
+//UC10- get no. of contact persons by type
+
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > SELECT COUNT(TYPE) FROM addressbook;
++-------------+
+| COUNT(TYPE) |
++-------------+
+|           6 |
++-------------+
+1 row in set (0.0026 sec)
+
+//UC11- add person to both friend and family
+
+  MySQL  localhost:33060+ ssl  addressbook_service  SQL > INSERT INTO addressbook VALUES ('Vaishali','Verma','Add1','Allahabad','UP','112236','9260924034','iimvaishali@gmail.com','vaishu','Friend'), ('Nadia','Anari','Dargah','Lko','UP','226004','98765401234','nadia@gmail.com','Noddy','Family');
+Query OK, 2 rows affected (0.0067 sec)
+
+Records: 2  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  addressbook_service  SQL > select * from addressbook;
++------------+-----------+----------------------+-----------+---------+--------+-------------+-----------------------+--------+---------+
+| first_name | last_name | address              | city      | state   | zip    | phone       | email                 | name   | type    |
++------------+-----------+----------------------+-----------+---------+--------+-------------+-----------------------+--------+---------+
+| Abc        | Xyz       | add                  | city      | state   | 123456 | 9876543210  | xyz@gmail.com         | NULL   | Friends |
+| Abdul      | Qadir     | chowk                | lko       | UP      | 226003 | 7905763733  | abdul@gmail.com       | NULL   | Friends |
+| Ahmed      | Kidwai    | 1134                 | Ahmedabad | Gujarat | 112233 | 7876564512  | ahmed@gmail.com       | NULL   | Friends |
+| Aqib       | Anees     | calcutta cloth house | lucknow   | UP      | 226641 | 7786042218  | aqib@gmail.com        | NULL   | Friends |
+| Asif       | Ansari    | meer anis lane       | Kanpur    | UP      | 668552 | 9856412378  | asif@gmail.com        | NULL   | Friends |
+| Kashif     | Ansari    | chowk                | lucknow   | UP      | 226003 | 9598252500  | krovel096@gmail.com   | NULL   | Friends |
+| Nadia      | Anari     | Dargah               | Lko       | UP      | 226004 | 98765401234 | nadia@gmail.com       | Noddy  | Family  |
+| Vaishali   | Verma     | Add1                 | Allahabad | UP      | 112236 | 9260924034  | iimvaishali@gmail.com | vaishu | Friend  |
++------------+-----------+----------------------+-----------+---------+--------+-------------+-----------------------+--------+---------+
+8 rows in set (0.0031 sec)
