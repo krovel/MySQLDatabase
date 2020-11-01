@@ -1,0 +1,111 @@
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > CREATE TABLE addressbook_main( addressbook_name   VARCHAR(200) NOT NULL,
+type               VARCHAR(200) NOT NULL, PRIMARY KEY        (addressbook_name) );
+Query OK, 0 rows affected (0.0771 sec)
+ 
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > INSERT INTO addressbook_main VALUES('1','Family'),('2','Colleague'), ('3','Friends');                                                                                                  
+Query OK, 3 rows affected (0.0153 sec)
+Records: 3  Duplicates: 0  Warnings: 0  
+
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > select * from addressbook_main;                     
+ +------------------+-----------+                                                                                        
+ | addressbook_name | type      |                                                                                       
+ +------------------+-----------+                                                                                     
+ | 1                | Family    |                                                                                       
+ | 2                | Colleague |                                                                                  
+ | 3                | Friends   |                                                                               
+ +------------------+-----------+                                                                                 
+ 3 rows in set (0.0008 sec)
+ 
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > CREATE TABLE person(user_id          INT NOT NULL,addressbook_name   VARCHAR(200) REFERENCES addressbook_main(addressbook_name),first_name         VARCHAR(200) NOT NULL,last_name          VARCHAR(200) NOT NULL,PRIMARY KEY        (user_id));     
+Query OK, 0 rows affected (0.0566 sec)
+
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > INSERT INTO person VALUES(1,'1','Kashif','Ansari'),(2,'1','Asif','Ansari'),(3,'2','Ahmed','Kidwai'),(4,'2','A','Bari'),(5,'3','F','Kidwai'),(6,'3','Abdul','Qadir');                   
+Query OK, 6 rows affected (0.0109 sec)                                                                                                                                                                                                          
+Records: 6  Duplicates: 0  Warnings: 0 
+                                                                                 
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > select * from person;                                          
+ +---------+------------------+------------+-----------+                                                                 
+ | user_id | addressbook_name | first_name | last_name |                                                              
+ +---------+------------------+------------+-----------+                                                                
+ |       1 | 1                | Kashif     | Ansari    |                                                                 
+ |       2 | 1                | Asif       | Ansari    |                                                               
+ |       3 | 2                | Ahmed      | Kidwai    |                                                     
+ |       4 | 2                | A          | Bari      |                                  
+ |       5 | 3                | F          | Kidwai    |                                                     
+ |       6 | 3                | Abdul      | Qadir     |       
+ +---------+------------------+------------+-----------+                         
+6 rows in set (0.0032 sec) 
+
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > CREATE TABLE contact(user_id           INT REFERENCES  person(user_id), phone_number        VARCHAR(200) NOT NULL, email               VARCHAR(200) NOT NULL);                                                                                                                                                                                                              
+Query OK, 0 rows affected (0.0956 sec)     
+ 
+ 
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > INSERT INTO contact VALUES      (1,'958','krovel096@gmail.com'),(2,'888','asf@gmail.com'),(3,'790','ahmd@gmail.com'),(4,'858','A@gmail.com'),(5,'999','F@gmail.com'),(6,'763','ab1@gmail.com'),(6,'763','ab2@gmail.com');   
+ Query OK, 7 rows affected (0.0089 sec)                                                                                                                                                                                                         
+ Records: 7  Duplicates: 0  Warnings: 0                                                                                   
+ 
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > select * from contact;                                        
+ +---------+--------------+---------------------+ 
+ | user_id | phone_number | email               |  
+ +---------+--------------+---------------------+ 
+ |       1 | 958          | krovel096@gmail.com |  
+ |       2 | 888          | asf@gmail.com       |  
+ |       3 | 790          | ahmd@gmail.com      |  
+ |       4 | 858          | A@gmail.com         |   
+ |       5 | 999          | F@gmail.com         |   
+ |       6 | 763          | ab1@gmail.com       |   
+ |       6 | 763          | ab2@gmail.com       |   
+ +---------+--------------+---------------------+      
+ 7 rows in set (0.0034 sec)  
+ 
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > CREATE TABLE address(user_id    INT REFERENCES person(user_id),street       VARCHAR(200) NOT NULL,city  VARCHAR(200) NOT NULL,state  VARCHAR(200) NOT NULL,zip  INT NOT NULL);         
+Query OK, 0 rows affected (0.1510 sec)     
+                                                                              
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > INSERT INTO address VALUES(1,'a','b','c','748'),(2,'d','e','f','798'),(3,'a','b','c','456'),(4,'h','i','j','123'),(5,'d','e','f','489'),(6,'w','x','y','852');                         
+Query OK, 6 rows affected (0.0122 sec)                                                                                                                                                                                                         
+Records: 6  Duplicates: 0  Warnings: 0   
+         
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > select * from address;                                        
+ +---------+--------+------+-------+-----+                                       
+ | user_id | street | city | state | zip |                                       
+ +---------+--------+------+-------+-----+                                       
+ |       1 | a      | b    | c     | 748 |                                       
+ |       2 | d      | e    | f     | 798 |                                      
+ |       3 | a      | b    | c     | 456 |                                   
+ |       4 | h      | i    | j     | 123 |                            
+ |       5 | d      | e    | f     | 489 |                      
+ |       6 | w      | x    | y     | 852 |                   
+ +---------+--------+------+-------+-----+               
+6 rows in set (0.0007 sec) 
+
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > SELECT * FROM person WHERE user_id IN(SELECT user_id FROM address WHERE city = 'x');                                                                                                   
++---------+------------------+------------+-----------+           
+| user_id | addressbook_name | first_name | last_name |  
++---------+------------------+------------+-----------+      
+|       6 | 3                | Abdul      | Qadir     |   
++---------+------------------+------------+-----------+   
+1 row in set (0.0026 sec)  
+
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > SELECT * FROM person WHERE user_id IN(SELECT user_id FROM address WHERE state = 'y');                                                                                                  
++---------+------------------+------------+-----------+       
+| user_id | addressbook_name | first_name | last_name |    
++---------+------------------+------------+-----------+  
+|       6 | 3                | Abdul      | Qadir     |    
++---------+------------------+------------+-----------+                                                                
+1 row in set (0.0014 sec) 
+ 
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > SELECT COUNT(user_id) FROM person WHERE user_id IN(SELECT user_id FROM address WHERE city ='b');              
++----------------+                                                     
+| COUNT(user_id) |                               
++----------------+                                                     
+|              2 |                               
++----------------+                                        
+1 row in set (0.0028 sec)  
+
+MySQL  localhost:33060+ ssl  addressbook_service  SQL > SELECT COUNT(user_id) FROM person WHERE user_id IN(SELECT user_id FROM address WHERE state ='c');                                                                                      
++----------------+                                                                                                      
+| COUNT(user_id) |                                                                                                      
++----------------+                                                                                                      
+|              2 |                                                                                                      
++----------------+                                                                                                      
+1 row in set (0.0009 sec)  
